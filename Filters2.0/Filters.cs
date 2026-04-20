@@ -55,6 +55,19 @@ namespace Filters2._0
         }
     }
 
+    class GrayScaleFilter : Filter
+    {
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
+            Color sourceColor = sourceImage.GetPixel(x, y);
+            double Intensity = 0.36 * sourceColor.R + 0.53 * sourceColor.G + 0.11 * sourceColor.B;
+            Color resultColor = Color.FromArgb((int)Intensity, (int)Intensity, (int)Intensity);
+            return resultColor;
+        }
+    }
+
+
+
     class MatrixFilter : Filter
     {
         protected float[,] kernel = null;
@@ -107,6 +120,33 @@ namespace Filters2._0
                 }
             }
 
+        }
+    }
+
+    class GaussianFilter : MatrixFilter
+    {
+        public GaussianFilter()
+        {
+            createGaussianKernel(3, 2); 
+        }
+        public void createGaussianKernel(int radius, float sigma)
+        {
+            int size = 2 * radius + 1;
+            kernel = new float[size, size];
+            float norm = 0;
+            for (int i = -radius; i <= radius; i++)
+            {
+                for (int j = -radius; j <= radius; j++)
+                {
+                    kernel[i + radius, j + radius] = (float)Math.Exp(-(i * i + j * j) / (2 * sigma * sigma));
+                    norm += kernel[i + radius, j + radius];
+                }
+            }
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                    kernel[i, j] /= norm;
+            }
         }
     }
 }

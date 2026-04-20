@@ -77,5 +77,17 @@ namespace Filters2._0
             Filter filter = new BlurFilter();
             backgroundWorker1.RunWorkerAsync(filter);
         }
+
+        private void ğàçìûòèåÏîÃàóññóToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filter filter = new GaussianFilter();
+            backgroundWorker1.RunWorkerAsync(filter);
+        }
+
+        private void ÷åğíîáåëûéToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filter filter = new GrayScaleFilter();
+            backgroundWorker1.RunWorkerAsync(filter);
+        }
     }
 }
