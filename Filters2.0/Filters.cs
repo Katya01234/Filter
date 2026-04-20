@@ -40,7 +40,7 @@ namespace Filters2._0
         }
     }
 
-    // Конкретный фильтр — Инверсия
+    // Инверсия
     class InvertFilter : Filter
     {
         protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
@@ -54,17 +54,18 @@ namespace Filters2._0
             return resultColor;
         }
     }
-
+    // Черно-белый
     class GrayScaleFilter : Filter
     {
         protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
         {
             Color sourceColor = sourceImage.GetPixel(x, y);
-            double Intensity = 0.36 * sourceColor.R + 0.53 * sourceColor.G + 0.11 * sourceColor.B;
+            double Intensity = 0.299 * sourceColor.R + 0.587 * sourceColor.G + 0.114 * sourceColor.B;
             Color resultColor = Color.FromArgb((int)Intensity, (int)Intensity, (int)Intensity);
             return resultColor;
         }
     }
+    // Сепия
     class SepiaFilter : Filter
     {
         protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
@@ -72,14 +73,28 @@ namespace Filters2._0
 
             Color sourceColor = sourceImage.GetPixel(x, y);
             int k = 10;
-            double Intensity = 0.36 * sourceColor.R + 0.53 * sourceColor.G + 0.11 * sourceColor.B;
+            double Intensity = 0.299 * sourceColor.R + 0.587 * sourceColor.G + 0.114 * sourceColor.B;
             Color resultColor = Color.FromArgb(Clamp((int)Intensity + 2 * k, 0, 255),
                 Clamp((int)(Intensity + 0.5 * k), 0, 255),
                 Clamp((int)Intensity - 1 * k, 0, 255));
             return resultColor;
         }
     }
+    // Яркость
+    class BrightFilter : Filter
+    {
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
+            Color sourceColor = sourceImage.GetPixel(x, y);
+            int k = 30;
 
+            Color resultColor = Color.FromArgb(Clamp(sourceColor.R + k, 0, 255),
+                Clamp(sourceColor.G + k, 0, 255),
+                Clamp(sourceColor.B + k, 0, 255));
+            return resultColor;
+        }
+    }
+    // Матричные фильтры
     class MatrixFilter : Filter
     {
         protected float[,] kernel = null;
@@ -117,6 +132,7 @@ namespace Filters2._0
         }
 
     }
+    // Размытие
     class BlurFilter : MatrixFilter
     {
         public BlurFilter()
@@ -134,7 +150,7 @@ namespace Filters2._0
 
         }
     }
-
+    // Размытие по Гауссу
     class GaussianFilter : MatrixFilter
     {
         public GaussianFilter()
