@@ -45,8 +45,10 @@
             pictureBox1.Location = new Point(0, 27);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(805, 345);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
+            pictureBox1.Click += pictureBox1_Click;
             // 
             // menuStrip1
             // 
@@ -69,7 +71,7 @@
             // открытьToolStripMenuItem
             // 
             открытьToolStripMenuItem.Name = "открытьToolStripMenuItem";
-            открытьToolStripMenuItem.Size = new Size(224, 26);
+            открытьToolStripMenuItem.Size = new Size(150, 26);
             открытьToolStripMenuItem.Text = "Открыть";
             открытьToolStripMenuItem.Click += открытьToolStripMenuItem_Click;
             // 
@@ -86,11 +88,14 @@
             точечныеToolStripMenuItem.Name = "точечныеToolStripMenuItem";
             точечныеToolStripMenuItem.Size = new Size(224, 26);
             точечныеToolStripMenuItem.Text = "Точечные";
+            точечныеToolStripMenuItem.Click += точечныеToolStripMenuItem_Click;
             // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
             toolStripMenuItem1.Size = new Size(224, 26);
+            toolStripMenuItem1.Text = "Инверсия";
+            toolStripMenuItem1.Click += инверсияtoolStripMenuItem1_Click;
             // 
             // матричныеToolStripMenuItem
             // 

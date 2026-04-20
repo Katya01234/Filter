@@ -27,5 +27,27 @@ namespace Filters2._0
                 pictureBox1.Refresh();
             }
         }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void точечныеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void инверсияtoolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            // Создаем экземпляр фильтра
+            Filter filter = new InvertFilter();
+            // Применяем его к картинке, которая загружена в приложение
+            Bitmap resultImage = filter.processImage(image);
+            // Отображаем результат в PictureBox
+            pictureBox1.Image = resultImage;
+            // Обновляем PictureBox
+            pictureBox1.Refresh();
+        }
     }
 }
