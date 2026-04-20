@@ -65,8 +65,20 @@ namespace Filters2._0
             return resultColor;
         }
     }
+    class SepiaFilter : Filter
+    {
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
 
-
+            Color sourceColor = sourceImage.GetPixel(x, y);
+            int k = 10;
+            double Intensity = 0.36 * sourceColor.R + 0.53 * sourceColor.G + 0.11 * sourceColor.B;
+            Color resultColor = Color.FromArgb(Clamp((int)Intensity + 2 * k, 0, 255),
+                Clamp((int)(Intensity + 0.5 * k), 0, 255),
+                Clamp((int)Intensity - 1 * k, 0, 255));
+            return resultColor;
+        }
+    }
 
     class MatrixFilter : Filter
     {
