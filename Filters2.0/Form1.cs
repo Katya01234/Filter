@@ -71,5 +71,11 @@ namespace Filters2._0
         {
             backgroundWorker1.CancelAsync();
         }
+
+        private void ğàçìûòèåToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filter filter = new BlurFilter();
+            backgroundWorker1.RunWorkerAsync(filter);
+        }
     }
 }

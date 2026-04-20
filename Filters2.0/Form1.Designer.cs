@@ -40,6 +40,7 @@
             progressBar1 = new ProgressBar();
             progressBar2 = new ProgressBar();
             button2 = new Button();
+            размытиеToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -90,7 +91,7 @@
             // 
             точечныеToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem1 });
             точечныеToolStripMenuItem.Name = "точечныеToolStripMenuItem";
-            точечныеToolStripMenuItem.Size = new Size(173, 26);
+            точечныеToolStripMenuItem.Size = new Size(224, 26);
             точечныеToolStripMenuItem.Text = "Точечные";
             точечныеToolStripMenuItem.Click += точечныеToolStripMenuItem_Click;
             // 
@@ -103,8 +104,9 @@
             // 
             // матричныеToolStripMenuItem
             // 
+            матричныеToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { размытиеToolStripMenuItem });
             матричныеToolStripMenuItem.Name = "матричныеToolStripMenuItem";
-            матричныеToolStripMenuItem.Size = new Size(173, 26);
+            матричныеToolStripMenuItem.Size = new Size(224, 26);
             матричныеToolStripMenuItem.Text = "Матричные";
             // 
             // backgroundWorker1
@@ -138,6 +140,13 @@
             button2.Text = "Отмена";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
+            // 
+            // размытиеToolStripMenuItem
+            // 
+            размытиеToolStripMenuItem.Name = "размытиеToolStripMenuItem";
+            размытиеToolStripMenuItem.Size = new Size(224, 26);
+            размытиеToolStripMenuItem.Text = "Размытие";
+            размытиеToolStripMenuItem.Click += размытиеToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -173,5 +182,6 @@
         private ProgressBar progressBar1;
         private ProgressBar progressBar2;
         private Button button2;
+        private ToolStripMenuItem размытиеToolStripMenuItem;
     }
 }

@@ -54,4 +54,59 @@ namespace Filters2._0
             return resultColor;
         }
     }
+
+    class MatrixFilter : Filter
+    {
+        protected float[,] kernel = null;
+        public MatrixFilter() { }
+        protected MatrixFilter(float[,] kernel)
+        {
+            this.kernel = kernel;
+        }
+
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
+            float resultR = 0;
+            float resultG = 0;
+            float resultB = 0;
+            int kernelSize = kernel.GetLength(0);
+            int radius = kernelSize / 2;
+            for (int j = -radius; j <= radius; j++)
+            {
+                for (int i = -radius; i <= radius; i++)
+                {
+                    int pixelX = Clamp(x + i, 0, sourceImage.Width - 1);
+                    int pixelY = Clamp(y + j, 0, sourceImage.Height - 1);
+                    Color neighborColor = sourceImage.GetPixel(pixelX, pixelY);
+                    float kernelValue = kernel[j + radius, i + radius];
+                    resultR += neighborColor.R * kernelValue;
+                    resultG += neighborColor.G * kernelValue;
+                    resultB += neighborColor.B * kernelValue;
+                }
+            }
+            return Color.FromArgb(
+                Clamp((int)resultR, 0, 255),
+                Clamp((int)resultG, 0, 255),
+                Clamp((int)resultB, 0, 255)
+            );
+        }
+
+    }
+    class BlurFilter : MatrixFilter
+    {
+        public BlurFilter()
+        {
+            int sizeX = 3;
+            int sizeY = 3;
+            kernel = new float[sizeY, sizeX];
+            for (int i = 0; i < sizeX; i++)
+            {
+                for (int j = 0; j < sizeY; j++)
+                {
+                    kernel[i, j] = 1.0f / (float)(sizeX * sizeY);
+                }
+            }
+
+        }
+    }
 }
