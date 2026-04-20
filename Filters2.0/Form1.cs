@@ -101,5 +101,11 @@ namespace Filters2._0
             Filter filter = new BrightFilter();
             backgroundWorker1.RunWorkerAsync(filter);
         }
+    
+        private void ñîáåëüToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Filter filter = new SobelFilter();
+            backgroundWorker1.RunWorkerAsync(filter);
+        }
     }
 }

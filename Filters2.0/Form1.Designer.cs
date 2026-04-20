@@ -37,6 +37,7 @@
             toolStripMenuItem1 = new ToolStripMenuItem();
             чернобелыйToolStripMenuItem = new ToolStripMenuItem();
             сепияToolStripMenuItem = new ToolStripMenuItem();
+            яркостьToolStripMenuItem = new ToolStripMenuItem();
             матричныеToolStripMenuItem = new ToolStripMenuItem();
             размытиеToolStripMenuItem = new ToolStripMenuItem();
             размытиеПоГауссуToolStripMenuItem = new ToolStripMenuItem();
@@ -44,7 +45,7 @@
             progressBar1 = new ProgressBar();
             progressBar2 = new ProgressBar();
             button2 = new Button();
-            яркостьToolStripMenuItem = new ToolStripMenuItem();
+            собельToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -120,9 +121,16 @@
             сепияToolStripMenuItem.Text = "Сепия";
             сепияToolStripMenuItem.Click += сепияToolStripMenuItem_Click;
             // 
+            // яркостьToolStripMenuItem
+            // 
+            яркостьToolStripMenuItem.Name = "яркостьToolStripMenuItem";
+            яркостьToolStripMenuItem.Size = new Size(224, 26);
+            яркостьToolStripMenuItem.Text = "Яркость";
+            яркостьToolStripMenuItem.Click += яркостьToolStripMenuItem_Click;
+            // 
             // матричныеToolStripMenuItem
             // 
-            матричныеToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { размытиеToolStripMenuItem, размытиеПоГауссуToolStripMenuItem });
+            матричныеToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { размытиеToolStripMenuItem, размытиеПоГауссуToolStripMenuItem, собельToolStripMenuItem });
             матричныеToolStripMenuItem.Name = "матричныеToolStripMenuItem";
             матричныеToolStripMenuItem.Size = new Size(224, 26);
             матричныеToolStripMenuItem.Text = "Матричные";
@@ -173,12 +181,12 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
-            // яркостьToolStripMenuItem
+            // собельToolStripMenuItem
             // 
-            яркостьToolStripMenuItem.Name = "яркостьToolStripMenuItem";
-            яркостьToolStripMenuItem.Size = new Size(224, 26);
-            яркостьToolStripMenuItem.Text = "Яркость";
-            яркостьToolStripMenuItem.Click += яркостьToolStripMenuItem_Click;
+            собельToolStripMenuItem.Name = "собельToolStripMenuItem";
+            собельToolStripMenuItem.Size = new Size(229, 26);
+            собельToolStripMenuItem.Text = "Собель";
+            собельToolStripMenuItem.Click += собельToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -219,5 +227,6 @@
         private ToolStripMenuItem чернобелыйToolStripMenuItem;
         private ToolStripMenuItem сепияToolStripMenuItem;
         private ToolStripMenuItem яркостьToolStripMenuItem;
+        private ToolStripMenuItem собельToolStripMenuItem;
     }
 }

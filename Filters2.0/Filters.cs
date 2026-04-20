@@ -177,4 +177,45 @@ namespace Filters2._0
             }
         }
     }
+    // Собель 
+    class SobelFilter : Filter
+    {
+        protected int[,] operatorX = { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } };
+        protected int[,] operatorY = { { -1, -2, -1 }, { 0, 0, 0 }, { 1, 2, 1 } };
+
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
+            int radiusX = operatorX.GetLength(0) / 2;
+            int radiusY = operatorY.GetLength(1) / 2;
+
+            float resultRX = 0;
+            float resultGX = 0;
+            float resultBX = 0;
+            float resultRY = 0;
+            float resultGY = 0;
+            float resultBY = 0;
+
+            for (int l = -radiusY; l <= radiusY; l++)
+                for (int k = -radiusX; k <= radiusX; k++)
+                {
+                    int idX = Clamp(x + k, 0, sourceImage.Width - 1);
+                    int idY = Clamp(y + l, 0, sourceImage.Height - 1);
+                    Color neighborColor = sourceImage.GetPixel(idX, idY);
+
+                    resultRX += neighborColor.R * operatorX[k + radiusX, l + radiusY];
+                    resultGX += neighborColor.G * operatorX[k + radiusX, l + radiusY];
+                    resultBX += neighborColor.B * operatorX[k + radiusX, l + radiusY];
+
+                    resultRY += neighborColor.R * operatorY[k + radiusX, l + radiusY];
+                    resultGY += neighborColor.G * operatorY[k + radiusX, l + radiusY];
+                    resultBY += neighborColor.B * operatorY[k + radiusX, l + radiusY];
+                }
+            int resultR = (int)Math.Sqrt(resultRX * resultRX + resultRY * resultRY);
+            int resultG = (int)Math.Sqrt(resultGX * resultGX + resultGY * resultGY);
+            int resultB = (int)Math.Sqrt(resultBX * resultBX + resultBY * resultBY);
+
+
+            return Color.FromArgb(Clamp(resultR, 0, 255), Clamp(resultG, 0, 255), Clamp(resultB, 0, 255));
+        }
+    }
 }
