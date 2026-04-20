@@ -40,14 +40,36 @@ namespace Filters2._0
 
         private void инверсияtoolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            // Создаем экземпляр фильтра
             Filter filter = new InvertFilter();
-            // Применяем его к картинке, которая загружена в приложение
-            Bitmap resultImage = filter.processImage(image);
-            // Отображаем результат в PictureBox
-            pictureBox1.Image = resultImage;
-            // Обновляем PictureBox
-            pictureBox1.Refresh();
+            backgroundWorker1.RunWorkerAsync(filter);
+        }
+
+        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            Bitmap newImage = ((Filter)e.Argument).processImage(image, backgroundWorker1);
+            if (backgroundWorker1.CancellationPending != true)
+            {
+                image = newImage;
+            }
+        }
+        private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            if (!e.Cancelled)
+            {
+                pictureBox1.Image = image;
+                pictureBox1.Refresh();
+            }
+            progressBar2.Value = 0;
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            progressBar2.Value = e.ProgressPercentage;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            backgroundWorker1.CancelAsync();
         }
     }
 }
