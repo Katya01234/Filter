@@ -293,4 +293,60 @@ namespace Filters2._0
             return resultImage;
         }
     }
+    // Гисторграмма (растяжение)
+    class HistogramStretchFilter : Filter
+    {
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y) => Color.Black;
+
+        public new Bitmap processImage(Bitmap sourceImage, BackgroundWorker worker)
+        {
+            Bitmap resultImage = new Bitmap(sourceImage.Width, sourceImage.Height);
+
+            int minR = 255, minG = 255, minB = 255;
+            int maxR = 0, maxG = 0, maxB = 0;
+
+            // ЭТАП 1: Поиск мин. и макс. значений по каждому каналу
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                if (worker.CancellationPending) return null;
+                worker.ReportProgress((int)((float)i / sourceImage.Width * 50));
+
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    Color c = sourceImage.GetPixel(i, j);
+                    if (c.R < minR) minR = c.R;
+                    if (c.G < minG) minG = c.G;
+                    if (c.B < minB) minB = c.B;
+
+                    if (c.R > maxR) maxR = c.R;
+                    if (c.G > maxG) maxG = c.G;
+                    if (c.B > maxB) maxB = c.B;
+                }
+            }
+
+            // ЭТАП 2: Растяжение
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                if (worker.CancellationPending) return null;
+                worker.ReportProgress(50 + (int)((float)i / sourceImage.Width * 50));
+
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    Color c = sourceImage.GetPixel(i, j);
+
+                    // Рассчитываем новые значения (с защитой от деления на ноль)
+                    int newR = (maxR == minR) ? c.R : (c.R - minR) * 255 / (maxR - minR);
+                    int newG = (maxG == minG) ? c.G : (c.G - minG) * 255 / (maxG - minG);
+                    int newB = (maxB == minB) ? c.B : (c.B - minB) * 255 / (maxB - minB);
+
+                    resultImage.SetPixel(i, j, Color.FromArgb(
+                        Clamp(newR, 0, 255),
+                        Clamp(newG, 0, 255),
+                        Clamp(newB, 0, 255)
+                    ));
+                }
+            }
+            return resultImage;
+        }
+    }
 }

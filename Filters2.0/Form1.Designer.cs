@@ -40,7 +40,8 @@
             чернобелыйToolStripMenuItem = new ToolStripMenuItem();
             сепияToolStripMenuItem = new ToolStripMenuItem();
             яркостьToolStripMenuItem = new ToolStripMenuItem();
-            серыйМирToolStripMenuItem = new ToolStripMenuItem(); // Инициализация
+            серыйМирToolStripMenuItem = new ToolStripMenuItem();
+            растяжениеГистограммыToolStripMenuItem = new ToolStripMenuItem(); // Инициализация
             матричныеToolStripMenuItem = new ToolStripMenuItem();
             размытиеToolStripMenuItem = new ToolStripMenuItem();
             размытиеПоГауссуToolStripMenuItem = new ToolStripMenuItem();
@@ -110,7 +111,7 @@
             // 
             // точечныеToolStripMenuItem
             // 
-            точечныеToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem1, чернобелыйToolStripMenuItem, сепияToolStripMenuItem, яркостьToolStripMenuItem, серыйМирToolStripMenuItem });
+            точечныеToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem1, чернобелыйToolStripMenuItem, сепияToolStripMenuItem, яркостьToolStripMenuItem, серыйМирToolStripMenuItem, растяжениеГистограммыToolStripMenuItem });
             точечныеToolStripMenuItem.Name = "точечныеToolStripMenuItem";
             точечныеToolStripMenuItem.Size = new Size(173, 26);
             точечныеToolStripMenuItem.Text = "Точечные";
@@ -149,6 +150,13 @@
             серыйМирToolStripMenuItem.Size = new Size(188, 26);
             серыйМирToolStripMenuItem.Text = "Серый мир";
             серыйМирToolStripMenuItem.Click += серыйМирToolStripMenuItem_Click;
+            // 
+            // растяжениеГистограммыToolStripMenuItem
+            // 
+            растяжениеГистограммыToolStripMenuItem.Name = "растяжениеГистограммыToolStripMenuItem";
+            растяжениеГистограммыToolStripMenuItem.Size = new Size(188, 26);
+            растяжениеГистограммыToolStripMenuItem.Text = "Растяжение гистограммы";
+            растяжениеГистограммыToolStripMenuItem.Click += растяжениеГистограммыToolStripMenuItem_Click;
             // 
             // матричныеToolStripMenuItem
             // 
@@ -245,7 +253,8 @@
         private ToolStripMenuItem чернобелыйToolStripMenuItem;
         private ToolStripMenuItem сепияToolStripMenuItem;
         private ToolStripMenuItem яркостьToolStripMenuItem;
-        private ToolStripMenuItem серыйМирToolStripMenuItem; 
+        private ToolStripMenuItem серыйМирToolStripMenuItem;
+        private ToolStripMenuItem растяжениеГистограммыToolStripMenuItem; // Поле в списке
         private ToolStripMenuItem матричныеToolStripMenuItem;
         private ToolStripMenuItem размытиеToolStripMenuItem;
         private ToolStripMenuItem размытиеПоГауссуToolStripMenuItem;

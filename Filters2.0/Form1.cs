@@ -182,7 +182,10 @@ namespace Filters2._0
         {
             ApplyFilter(new GrayWorldFilter());
         }
-
+        private void ğàñòÿæåíèåÃèñòîãğàììûToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ApplyFilter(new HistogramStretchFilter());
+        }
         private void PictureBox_DragDrop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
