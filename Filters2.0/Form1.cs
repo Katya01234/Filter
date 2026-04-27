@@ -7,16 +7,14 @@ namespace Filters2._0
 {
     public partial class Form1 : Form
     {
-        // Основное изображение и стек для реализации Undo
         private Bitmap image;
         private Stack<Bitmap> history = new Stack<Bitmap>();
 
         public Form1()
         {
             InitializeComponent();
-
-            // Включаем поддержку Drag & Drop и горячих клавиш
             this.KeyPreview = true;
+            // Убедись, что эти события подписаны здесь, если их нет в Designer.cs
             this.KeyDown += Form1_KeyDown;
             this.AllowDrop = true;
             pictureBox1.AllowDrop = true;
@@ -24,9 +22,6 @@ namespace Filters2._0
             pictureBox1.DragDrop += PictureBox_DragDrop;
         }
 
-        /// <summary>
-        /// Общий метод для запуска любого фильтра
-        /// </summary>
         private void ApplyFilter(Filter filter)
         {
             if (image == null)
@@ -37,7 +32,6 @@ namespace Filters2._0
 
             if (!backgroundWorker1.IsBusy)
             {
-                // Визуальный отклик: блокируем меню на время обработки
                 menuStrip1.Enabled = false;
                 backgroundWorker1.RunWorkerAsync(filter);
             }
@@ -52,7 +46,6 @@ namespace Filters2._0
                 dialog.Filter = "Image files|*.bmp;*.jpg;*.jpeg;*.png;*.gif|All files|*.*";
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    // Очистка старых ресурсов перед загрузкой нового фото
                     if (image != null) image.Dispose();
                     while (history.Count > 0) history.Pop().Dispose();
 
@@ -66,12 +59,9 @@ namespace Filters2._0
         private void сохранитьКакToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (image == null) return;
-
             using (SaveFileDialog saveDialog = new SaveFileDialog())
             {
                 saveDialog.Filter = "JPeg Image|*.jpg|Bitmap Image|*.bmp|Gif Image|*.gif";
-                saveDialog.Title = "Save an Image File";
-
                 if (saveDialog.ShowDialog() == DialogResult.OK && saveDialog.FileName != "")
                 {
                     using (System.IO.FileStream fs = (System.IO.FileStream)saveDialog.OpenFile())
@@ -79,7 +69,6 @@ namespace Filters2._0
                         var format = System.Drawing.Imaging.ImageFormat.Jpeg;
                         if (saveDialog.FilterIndex == 2) format = System.Drawing.Imaging.ImageFormat.Bmp;
                         if (saveDialog.FilterIndex == 3) format = System.Drawing.Imaging.ImageFormat.Gif;
-
                         image.Save(fs, format);
                     }
                 }
@@ -88,14 +77,12 @@ namespace Filters2._0
 
         #endregion
 
-        #region BackgroundWorker (Фоновая обработка)
+        #region BackgroundWorker
 
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            // Работаем с копией, чтобы не мешать основному потоку отрисовки
             Bitmap source = (Bitmap)image.Clone();
             Filter filter = (Filter)e.Argument;
-
             Bitmap result = filter.processImage(source, backgroundWorker1);
 
             if (backgroundWorker1.CancellationPending)
@@ -103,11 +90,8 @@ namespace Filters2._0
                 e.Cancel = true;
                 result?.Dispose();
             }
-            else
-            {
-                e.Result = result;
-            }
-            source.Dispose(); // Чистим временную копию
+            else e.Result = result;
+            source.Dispose();
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
@@ -119,22 +103,16 @@ namespace Filters2._0
         {
             if (!e.Cancelled && e.Error == null && e.Result != null)
             {
-                // Кладем текущее состояние в историю ПЕРЕД обновлением
                 history.Push(image);
-
                 image = (Bitmap)e.Result;
                 pictureBox1.Image = image;
             }
-
             progressBar2.Value = 0;
-            menuStrip1.Enabled = true; // Разблокируем интерфейс
+            menuStrip1.Enabled = true;
             pictureBox1.Refresh();
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            backgroundWorker1.CancelAsync();
-        }
+        private void button2_Click(object sender, EventArgs e) => backgroundWorker1.CancelAsync();
 
         #endregion
 
@@ -144,6 +122,16 @@ namespace Filters2._0
         private void чернобелыйToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new GrayScaleFilter());
         private void сепияToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new SepiaFilter());
         private void яркостьToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new BrightFilter());
+        private void серыйМирToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new GrayWorldFilter());
+        private void растяжениеГистограммыToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new HistogramStretchFilter());
+
+        // Геометрические фильтры
+        private void переносToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new ShiftFilter());
+        private void поворотToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new RotationFilter(Math.PI / 6)); // Поворот на 30 градусов
+        private void волныToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new WavesFilter());
+        private void эффектСтеклаToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new GlassFilter());
+
+        // Матричные фильтры
         private void размытиеToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new BlurFilter());
         private void размытиеПоГауссуToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new GaussianFilter());
         private void собельToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new SobelFilter());
@@ -151,7 +139,7 @@ namespace Filters2._0
 
         #endregion
 
-        #region Управление (Undo / Hotkeys / DragDrop)
+        #region Управление
 
         private void назадToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -160,12 +148,8 @@ namespace Filters2._0
                 Bitmap toDelete = image;
                 image = history.Pop();
                 pictureBox1.Image = image;
-                toDelete.Dispose(); // Удаляем старый Bitmap из памяти
+                toDelete.Dispose();
                 pictureBox1.Refresh();
-            }
-            else
-            {
-                MessageBox.Show("История пуста!");
             }
         }
 
@@ -178,14 +162,7 @@ namespace Filters2._0
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
         }
-        private void серыйМирToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ApplyFilter(new GrayWorldFilter());
-        }
-        private void растяжениеГистограммыToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ApplyFilter(new HistogramStretchFilter());
-        }
+
         private void PictureBox_DragDrop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -195,18 +172,13 @@ namespace Filters2._0
                 {
                     if (image != null) image.Dispose();
                     while (history.Count > 0) history.Pop().Dispose();
-
                     image = new Bitmap(files[0]);
                     pictureBox1.Image = image;
                     pictureBox1.Refresh();
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка при загрузке: " + ex.Message);
-                }
+                catch (Exception ex) { MessageBox.Show("Ошибка: " + ex.Message); }
             }
         }
-
         #endregion
     }
 }

@@ -349,4 +349,81 @@ namespace Filters2._0
             return resultImage;
         }
     }
+
+    // Базовый класс для геометрических фильтров
+    abstract class GeometricFilter : Filter
+    {
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
+            // Вычисляем новые координаты на основе формул
+            int k = (int)calculateNewX(x, y);
+            int l = (int)calculateNewY(x, y);
+
+            // Проверка на выход за границы изображения
+            if (k < 0 || k >= sourceImage.Width || l < 0 || l >= sourceImage.Height)
+                return Color.Black;
+
+            return sourceImage.GetPixel(k, l);
+        }
+
+        protected abstract double calculateNewX(int x, int y);
+        protected abstract double calculateNewY(int x, int y);
+    }
+
+    // 1.1 Перенос (Shift)
+    class ShiftFilter : GeometricFilter
+    {
+        protected override double calculateNewX(int x, int y) => x + 50;
+        protected override double calculateNewY(int x, int y) => y;
+    }
+
+    // 1.2 Волны (Waves Type 1)
+    class WavesFilter : GeometricFilter
+    {
+        protected override double calculateNewX(int x, int y) => x + 20 * Math.Sin(2 * Math.PI * y / 60);
+        protected override double calculateNewY(int x, int y) => y;
+    }
+
+    // 1.3 Поворот (Rotate)
+    class RotationFilter : GeometricFilter
+    {
+        private double angle;
+
+        // Добавляем конструктор, чтобы принимать угол
+        public RotationFilter(double angle)
+        {
+            this.angle = angle;
+        }
+
+        protected override double calculateNewX(int x, int y)
+        {
+            int x0 = 150; // Центр поворота
+            int y0 = 150;
+            return (x - x0) * Math.Cos(angle) - (y - y0) * Math.Sin(angle) + x0;
+        }
+
+        protected override double calculateNewY(int x, int y)
+        {
+            int x0 = 150;
+            int y0 = 150;
+            return (x - x0) * Math.Sin(angle) + (y - y0) * Math.Cos(angle) + y0;
+        }
+    }
+
+    // 1.4 Эффект стекла (Glass)
+    class GlassFilter : GeometricFilter
+    {
+        private Random rand = new Random();
+
+        protected override double calculateNewX(int x, int y)
+        {
+            // Смещаем координату на случайное число в диапазоне [-0.5, 0.5]
+            return x + (rand.NextDouble() - 0.5) * 10;
+        }
+
+        protected override double calculateNewY(int x, int y)
+        {
+            return y + (rand.NextDouble() - 0.5) * 10;
+        }
+    }
 }
