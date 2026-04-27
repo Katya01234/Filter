@@ -218,4 +218,79 @@ namespace Filters2._0
             return Color.FromArgb(Clamp(resultR, 0, 255), Clamp(resultG, 0, 255), Clamp(resultB, 0, 255));
         }
     }
+    // Резкость
+    class RezkostFilter : MatrixFilter
+    {
+        public RezkostFilter()
+        {
+            kernel = new float[3, 3];
+            kernel[0, 0] = 0; kernel[0, 1] = -1; kernel[0, 2] = 0;
+            kernel[1, 0] = -1; kernel[1, 1] = 5; kernel[1, 2] = -1;
+            kernel[2, 0] = 0; kernel[2, 1] = -1; kernel[2, 2] = 0;
+
+        }
+    }
+
+    // Фильтр "Серый мир"
+    class GrayWorldFilter : Filter
+    {
+        // Нам не нужен calculateNewPixelColor, так как мы полностью меняем логику в processImage
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y) => Color.Black;
+
+        public new Bitmap processImage(Bitmap sourceImage, BackgroundWorker worker)
+        {
+            Bitmap resultImage = new Bitmap(sourceImage.Width, sourceImage.Height);
+
+            double avgR = 0, avgG = 0, avgB = 0;
+            int totalPixels = sourceImage.Width * sourceImage.Height;
+
+            // Шаг 1: Вычисляем средние значения каналов
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                if (worker.CancellationPending) return null;
+                // Отчет о прогрессе (первые 50% на анализ)
+                worker.ReportProgress((int)((float)i / sourceImage.Width * 50));
+
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    Color c = sourceImage.GetPixel(i, j);
+                    avgR += c.R;
+                    avgG += c.G;
+                    avgB += c.B;
+                }
+            }
+
+            avgR /= totalPixels;
+            avgG /= totalPixels;
+            avgB /= totalPixels;
+
+            // Среднее по всем каналам
+            double avgAll = (avgR + avgG + avgB) / 3.0;
+
+            // Коэффициенты масштабирования
+            double kr = avgAll / avgR;
+            double kg = avgAll / avgG;
+            double kb = avgAll / avgB;
+
+            // Шаг 2: Применяем коэффициенты к каждому пикселю
+            for (int i = 0; i < sourceImage.Width; i++)
+            {
+                if (worker.CancellationPending) return null;
+                // Отчет о прогрессе (вторые 50% на отрисовку)
+                worker.ReportProgress(50 + (int)((float)i / sourceImage.Width * 50));
+
+                for (int j = 0; j < sourceImage.Height; j++)
+                {
+                    Color c = sourceImage.GetPixel(i, j);
+                    resultImage.SetPixel(i, j, Color.FromArgb(
+                        Clamp((int)(c.R * kr), 0, 255),
+                        Clamp((int)(c.G * kg), 0, 255),
+                        Clamp((int)(c.B * kb), 0, 255)
+                    ));
+                }
+            }
+
+            return resultImage;
+        }
+    }
 }
