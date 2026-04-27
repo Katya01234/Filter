@@ -350,6 +350,37 @@ namespace Filters2._0
         }
     }
 
+    // Тиснение
+    class EmbossFilter : MatrixFilter
+    {
+        public EmbossFilter()
+        {
+            kernel = new float[,] { { 0,  1,  0 },
+                                { 1,  0, -1 },
+                                { 0, -1,  0 } };
+        }
+
+        protected override Color calculateNewPixelColor(Bitmap sourceImage, int x, int y)
+        {
+            float resultR = 0, resultG = 0, resultB = 0;
+            for (int i = -1; i <= 1; i++)
+                for (int j = -1; j <= 1; j++)
+                {
+                    Color neighborColor = sourceImage.GetPixel(
+                        Clamp(x + i, 0, sourceImage.Width - 1),
+                        Clamp(y + j, 0, sourceImage.Height - 1));
+
+                    // Переводим в полутоновое для этого эффекта
+                    float intensity = (neighborColor.R + neighborColor.G + neighborColor.B) / 3.0f;
+                    resultR += intensity * kernel[i + 1, j + 1];
+                }
+
+            // Сдвиг по яркости + нормализация согласно методичке
+            int finalRes = Clamp((int)((resultR + 255) / 2), 0, 255);
+            return Color.FromArgb(finalRes, finalRes, finalRes);
+        }
+    }
+
     // Базовый класс для геометрических фильтров
     abstract class GeometricFilter : Filter
     {
