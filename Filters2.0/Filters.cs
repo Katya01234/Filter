@@ -380,6 +380,17 @@ namespace Filters2._0
             return Color.FromArgb(finalRes, finalRes, finalRes);
         }
     }
+    // Размытие в движении
+    class MotionBlurFilter : MatrixFilter
+    {
+        public MotionBlurFilter(int n = 7) // n - размер матрицы
+        {
+            kernel = new float[n, n];
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < n; j++)
+                    kernel[i, j] = (i == j) ? 1.0f / n : 0;
+        }
+    }
 
     // Базовый класс для геометрических фильтров
     abstract class GeometricFilter : Filter

@@ -137,6 +137,7 @@ namespace Filters2._0
         private void ñîáåëüToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new SobelFilter());
         private void ðåçêîñòüToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new RezkostFilter());
         private void òèñíåíèåToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new EmbossFilter());
+        private void ðàçìûòèåâäâèæåíèèToolStripMenuItem_Click(object sender, EventArgs e) => ApplyFilter(new MotionBlurFilter());
 
         #endregion
 

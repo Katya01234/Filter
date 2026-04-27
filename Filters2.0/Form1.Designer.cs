@@ -39,6 +39,7 @@
             собельToolStripMenuItem = new ToolStripMenuItem();
             резкостьToolStripMenuItem = new ToolStripMenuItem();
             тиснениеToolStripMenuItem = new ToolStripMenuItem();
+            размытиевдвиженииToolStripMenuItem = new ToolStripMenuItem();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             progressBar2 = new ProgressBar();
             button2 = new Button();
@@ -129,8 +130,8 @@
                 размытиеПоГауссуToolStripMenuItem,
                 собельToolStripMenuItem,
                 резкостьToolStripMenuItem,
-                тиснениеToolStripMenuItem
-
+                тиснениеToolStripMenuItem,
+                размытиевдвиженииToolStripMenuItem
             });
             матричныеToolStripMenuItem.Text = "Матричные";
 
@@ -144,6 +145,8 @@
             резкостьToolStripMenuItem.Click += резкостьToolStripMenuItem_Click;
             тиснениеToolStripMenuItem.Text = "Тиснение";
             тиснениеToolStripMenuItem.Click += тиснениеToolStripMenuItem_Click;
+            размытиевдвиженииToolStripMenuItem.Text = "Размытие в движении";
+            размытиевдвиженииToolStripMenuItem.Click += размытиевдвиженииToolStripMenuItem_Click;
 
             // backgroundWorker1
             backgroundWorker1.WorkerReportsProgress = true;
@@ -207,6 +210,7 @@
         private ToolStripMenuItem собельToolStripMenuItem;
         private ToolStripMenuItem резкостьToolStripMenuItem;
         private ToolStripMenuItem тиснениеToolStripMenuItem;
+        private ToolStripMenuItem размытиевдвиженииToolStripMenuItem;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private ProgressBar progressBar2;
         private Button button2;
